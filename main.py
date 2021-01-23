@@ -1,2 +1,2 @@
 print("Hello World!")
-input("How can I help you?")
+help = input("How can I help you?")
