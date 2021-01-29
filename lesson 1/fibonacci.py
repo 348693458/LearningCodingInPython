@@ -5,7 +5,7 @@ b = 1
 # using infinity loop and break statement
 while True:
     c = a + b
-    print(c, end = " ")
+    print(c, end = ", ")
     a = b
     b = c
     if c >= 100:
