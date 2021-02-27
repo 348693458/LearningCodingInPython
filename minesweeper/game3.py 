@@ -1,0 +1,11 @@
+import curses
+
+def sweeper(stdscr):
+
+  for y in range(0, 6):
+    for x in range(0, 6):
+      stdscr.addstr(y, x, chr(9608))
+
+  stdscr.getch()
+
+curses.wrapper(sweeper)

@@ -1,4 +1,3 @@
-
 import curses
 from curses import textpad
 import random
@@ -42,16 +41,15 @@ def board(stdscr):
 
   #setup food variable.
   food = [
-    random.randint(box[0][0], box[1][0] - 1),
-    random.randint(box[0][1], box[1][1] - 1)
+    random.randint(box[0][0] , box[1][0] - 1),
+    random.randint(box[0][1] , box[1][1] - 1)
   ]
   food_ch = "*"
   stdscr.addstr(food[0], food[1], food_ch)
-  
+
   while True:
     #ESC to exit
     #will give -1 if timeout
-
     key = stdscr.getch()
     if key == 27:
       break 
