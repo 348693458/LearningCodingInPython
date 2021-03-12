@@ -1,9 +1,13 @@
 import curses
-from curses import textpad
 import random
+from curses import textpad
 
 def board(stdscr):
 
+  curses.start_color()
+  curses.use_default_colors()
+  for i in range(0, curses.COLORS):
+    curses.init_pair(i +1, i, -1)
   #turn of the cursor 
   curses.curs_set(0)
   stdscr.nodelay(1)
@@ -41,13 +45,14 @@ def board(stdscr):
 
   #setup food variable.
   food = [
-    random.randint(box[0][0] , box[1][0] - 1),
-    random.randint(box[0][1] , box[1][1] - 1)
+    random.randint(box[0][0] + 1, box[1][0] - 1),
+    random.randint(box[0][1] + 1, box[1][1] - 1)
   ]
   food_ch = "*"
   stdscr.addstr(food[0], food[1], food_ch)
 
   while True:
+
     #ESC to exit
     #will give -1 if timeout
     key = stdscr.getch()
@@ -76,21 +81,31 @@ def board(stdscr):
     elif direction == curses.KEY_RIGHT:
       new_head = [head[0], head[1] + 1]
     #paint the new head 
-    stdscr.addstr(new_head[0], new_head[1], snake_ch)
+    stdscr.addstr(new_head[0], new_head[1], snake_ch, curses.color_pair(random.randint(1, 100)))
     #change the current body
     snake.insert(0, new_head)
-    #take away the current tail
-    tail = snake[-1]
-    stdscr.addstr(tail[0], tail[1], ' ')
-    #pop function will pop out and remove the last item of this list 
-    snake.pop()
 
-    #if head touches border, game over
+    #take away the current for every movement
+    tail = snake[-1]
+    if new_head == food:
+      #grow the snake by not erasing its tail when the food is eaten
+      #generate a new food
+      food = [
+        random.randint(box[0][0] + 1, box[0][1] - 1),
+        random.randint(box[1][0] + 1, box[1][1] - 1)
+      ]
+      stdscr.addstr(food[0], food[1], food_ch)
+    else:
+      #erase tail if snake has moved but not eaten food
+      stdscr.addstr(tail[0], tail[1], ' ')
+      #pop function will pop out and remove the last item of this list 
+      snake.pop()
+
     if (snake[0][0] == box[0][0] or
         snake[0][0] == box[1][0] or
-        snake[0][0] == box[0][0] or
-        snake[0][0] == box[0][0]):
-        stdscr.addstr("GAME OVER!")
+        snake[0][1] == box[0][1] or
+        snake[0][1] == box[1][1]):
+        stdscr.addstr(sh // 2, sw // 2 - 2, "GAME OVER!")
         stdscr.nodelay(0)
         stdscr.getch()
         break
