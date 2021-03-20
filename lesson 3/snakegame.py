@@ -91,8 +91,8 @@ def board(stdscr):
       #grow the snake by not erasing its tail when the food is eaten
       #generate a new food
       food = [
-        random.randint(box[0][0] + 1, box[0][1] - 1),
-        random.randint(box[1][0] + 1, box[1][1] - 1)
+        random.randint(box[0][0] + 1, box[1][0] - 1),
+        random.randint(box[0][1] + 1, box[1][1] - 1)
       ]
       stdscr.addstr(food[0], food[1], food_ch)
     else:
