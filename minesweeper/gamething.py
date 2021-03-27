@@ -168,15 +168,28 @@ def flagcell(cell):
     elif cell[3] == "flagged":
         cell[3] = "covered" 
 
-
 def opensurrounding(stdscr, field, r, c, colors):
-
-    # TODO: check if there are correct flagged cells currounding.
-    # if the number of bombs for the current cell is NOT match
-    # the flagged cells we will not reveal any!
     if field[r][c][3] != 'revealed':
-        return
-
+    # go through cells and check bounds
+        for sr in [r - 1, r, r + 1]:
+            for sc in [c - 1, c, c + 1]:
+                # if its out of bounds
+                if (sc < 0 or sc > len(field[0]) - 1 or
+                sr < 0 or sr > len(field) - 1):
+                    continue
+                # if they r the same 
+                elif sr == r and sc == c:
+                    continue
+    # dig the cell, opensurroundings
+    scell = field[sr][sc]
+    if scell[3] == "covered":
+        if scell[2] == -1:
+            scell[3] = "blasted"
+        else:
+            scell[3] = "revealed"
+            paintcell(stdscr, scell, colors)
+        if scell[2] == 0:
+            opensurrounding(stdscr, field, sr, sc, colors)
 
 """
 Game over logic
@@ -231,6 +244,8 @@ def sweeper(stdscr):
         elif userkey == 102:
             # f 102
             flagcell(field[r][c])
+        elif userkey in [32]:
+            opensurrounding(stdscr, field, r, c, colors)
 
         # paint the current cell normally
         paintcell(stdscr, field[r][c], colors)
